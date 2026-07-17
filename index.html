@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نبراس المالي</title>
+  <style>
+    :root{
+      --bg:#f7f3ee;
+      --surface:#ffffff;
+      --navy:#0b2742;
+      --navy-2:#17466f;
+      --orange:#cf6a4a;
+      --orange-soft:#f6e0d6;
+      --green:#2f9e68;
+      --green-soft:#eaf6ef;
+      --blue:#4a7fc2;
+      --blue-soft:#edf4ff;
+      --purple:#7a68ca;
+      --purple-soft:#f1edff;
+      --red:#d85a5a;
+      --red-soft:#fff0ee;
+      --ink:#12293f;
+      --muted:#7d8896;
+      --line:#ece3da;
+      --shadow:0 14px 30px rgba(13,38,61,.08);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at 50% 0%,#e9e4da 0%,#d9d3c6 100%);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
+      color:var(--ink);
+      padding:48px 20px;
+    }
+    .iphone-shell{
+      position:relative;
+      width:452px;
+      max-width:100%;
+    }
+    .iphone-frame{
+      position:relative;
+      width:100%;
+      height:924px;
+      max-height:88vh;
+      background:linear-gradient(160deg,#2b2b2e,#0a0a0b);
+      border-radius:64px;
+      padding:15px;
+      box-shadow:0 50px 90px -20px rgba(20,20,20,.45), inset 0 0 0 2px rgba(255,255,255,.08);
+    }
+    .dynamic-island{
+      position:absolute;
+      top:30px;
+      left:50%;
+      transform:translateX(-50%);
+      width:96px;
+      height:26px;
+      background:#000;
+      border-radius:16px;
+      z-index:50;
+      pointer-events:none;
+    }
+    .side-btn{
+      position:absolute;
+      width:3px;
+      background:linear-gradient(90deg,#0a0a0b,#333);
+      border-radius:2px 0 0 2px;
+      z-index:1;
+    }
+    .volume-up{left:-3px; top:150px; height:52px;}
+    .volume-down{left:-3px; top:212px; height:52px;}
+    .power-btn{right:-3px; left:auto; top:180px; height:78px; border-radius:0 2px 2px 0;}
+    .home-indicator{
+      position:absolute;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      width:128px;
+      height:5px;
+      border-radius:3px;
+      background:#0b2742;
+      opacity:.28;
+      z-index:50;
+      pointer-events:none;
+    }
+    .app{
+      width:100%;
+      height:100%;
+      background:var(--bg);
+      border-radius:48px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .screensWrap{
+      flex:1;
+      min-height:0;
+      overflow-y:auto;
+      overflow-x:hidden;
+      -webkit-overflow-scrolling:touch;
+      position:relative;
+    }
+    .screen{display:none; padding:46px 18px 28px; min-height:100%}
+    .screen.active{display:block}
+    h1,h2,h3,h4,p{margin:0}
+    h1{font-size:25px;line-height:1.2;letter-spacing:-.4px}
+    h2{font-size:20px;line-height:1.3}
+    h3{font-size:16px;line-height:1.4}
+    h4{font-size:14px;line-height:1.4}
+    .muted{font-size:13px; color:var(--muted); line-height:1.7}
+    .tiny{font-size:11px; color:var(--muted); line-height:1.55}
+    .num{direction:ltr; display:inline-block}
+    .top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:4px 0 18px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; color:var(--navy)}
+    .logo{width:42px; height:42px; border-radius:14px; background:linear-gradient(135deg,var(--navy),var(--navy-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; box-shadow:0 8px 18px rgba(11,39,66,.18); flex:0 0 auto}
+    .logo svg{width:22px; height:22px; display:block}
+    .chip{display:inline-flex; align-items:center; justify-content:center; padding:7px 11px; border-radius:999px; font-size:12px; font-weight:900; background:#fff; border:1px solid var(--line); color:var(--navy)}
+    .chip.green{background:var(--green-soft); color:var(--green); border-color:#cfe8da}
+    .chip.orange{background:var(--orange-soft); color:var(--orange); border-color:#efc8b8}
+    .chip.red{background:var(--red-soft); color:var(--red); border-color:#f2cccc}
+    .hero{background:linear-gradient(135deg,var(--navy),var(--navy-2)); color:#fff; border-radius:28px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; margin-bottom:14px}
+    .hero:after{content:""; position:absolute; width:180px; height:180px; left:-65px; bottom:-90px; border-radius:50%; background:rgba(255,255,255,.08)}
+    .hero>*{position:relative; z-index:1}
+    .hero .muted{color:#dbe5ef}
+    .heroAmount{font-size:33px; font-weight:950; margin:12px 0 8px; direction:ltr; text-align:right}
+    .statusBox{display:block; padding:12px 13px; border-radius:18px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.13); margin-top:12px}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .card{background:var(--surface); border-radius:var(--radius); padding:15px; border:1px solid rgba(255,255,255,.8); box-shadow:var(--shadow); margin-bottom:12px}
+    .metric{min-height:102px}
+    .metricIcon, .softIcon{width:36px;height:36px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;background:var(--orange-soft);color:var(--orange)}
+    .metricIcon.green,.softIcon.green{background:var(--green-soft);color:var(--green)}
+    .metricIcon.blue,.softIcon.blue{background:var(--blue-soft);color:var(--blue)}
+    .metricIcon.purple,.softIcon.purple{background:var(--purple-soft);color:var(--purple)}
+    .sectionTitle{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px}
+    .link{font-size:12px; color:var(--orange); font-weight:900}
+    .row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line)}
+    .row:last-child{border-bottom:0}
+    .left{display:flex; align-items:flex-start; gap:11px; min-width:0; flex:1}
+    .icon{width:42px; height:42px; border-radius:15px; display:flex; align-items:center; justify-content:center; background:var(--orange-soft); color:var(--orange); font-size:20px; flex:0 0 auto}
+    .icon.green{background:var(--green-soft);color:var(--green)}
+    .icon.blue{background:var(--blue-soft);color:var(--blue)}
+    .icon.purple{background:var(--purple-soft);color:var(--purple)}
+    .icon.red{background:var(--red-soft);color:var(--red)}
+    .amountSmall{font-weight:950; direction:ltr; white-space:nowrap}
+    .truncate{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:210px}
+    .progressBg{height:9px; border-radius:999px; background:#efe7df; overflow:hidden; margin-top:8px}
+    .progressFill{height:100%; border-radius:999px; background:var(--orange)}
+    .progressFill.green{background:var(--green)}
+    .progressFill.blue{background:var(--blue)}
+    .progressFill.purple{background:var(--purple)}
+    .progressFill.red{background:var(--red)}
+    .featureGrid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+    .featureCard{background:#fff; border:1px solid var(--line); border-radius:20px; padding:14px; box-shadow:var(--shadow)}
+    .featureCard h4{margin-bottom:3px; color:var(--navy)}
+    .featureCard p{font-size:11px; color:var(--muted); line-height:1.55}
+    .alertRow{display:flex; align-items:flex-start; gap:10px; padding:12px 0; border-bottom:1px solid var(--line)}
+    .alertRow:last-child{border-bottom:0}
+    .alertDot{width:38px; height:38px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:var(--orange-soft); color:var(--orange); font-size:18px; flex:0 0 auto}
+    .alertDot.blue{background:var(--blue-soft); color:var(--blue)}
+    .alertDot.green{background:var(--green-soft); color:var(--green)}
+    .alertDot.purple{background:var(--purple-soft); color:var(--purple)}
+    .alertText b{display:block; margin-bottom:3px; color:var(--navy)}
+    .alertText p{font-size:12px; color:var(--muted); line-height:1.6}
+    .statusLabel{display:flex; align-items:center; gap:8px; color:#ffcfbf; font-size:13px; font-weight:900; margin-bottom:6px}
+    .statusLabel .dot{width:8px; height:8px; border-radius:50%; background:var(--orange); display:inline-block}
+    .budgetSummary{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+    .budgetMini{background:#f8f4ef; border:1px solid var(--line); border-radius:18px; padding:12px}
+    .budgetMini strong{display:block; margin-top:4px; font-size:16px}
+    .budgetGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+    .budgetBox{background:#fff; border:1px solid var(--line); border-radius:22px; padding:14px; cursor:pointer; box-shadow:var(--shadow); min-height:142px}
+    .budgetBox.active{border-color:var(--navy); box-shadow:0 0 0 2px rgba(11,39,66,.06), var(--shadow)}
+    .budgetBoxTop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+    .budgetPercent{font-weight:950; color:var(--navy); font-size:16px; direction:ltr}
+    .budgetBox p{font-size:12px; color:var(--muted); line-height:1.55; margin-top:4px}
+    .budgetMeta{display:flex; justify-content:space-between; align-items:center; margin-top:10px; color:var(--muted); font-size:11px}
+    .outlineBtn{width:100%; margin-top:10px; border:1px solid var(--line); background:#f8f4ef; color:var(--navy); border-radius:14px; padding:10px 12px; font-weight:900; font-size:12px; cursor:pointer}
+    .detailsCard{margin-top:12px}
+    .detailsHeader{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px}
+    .detailTag{display:inline-flex; align-items:center; justify-content:center; padding:7px 10px; border-radius:999px; background:var(--orange-soft); color:var(--orange); font-size:12px; font-weight:900}
+    .emptyBox{padding:14px; border-radius:16px; background:#f8f4ef; border:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.6}
+    .circleWrap{display:grid; grid-template-columns:118px 1fr; gap:14px; align-items:center; margin-top:12px}
+    .circle{width:116px; height:116px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; background:conic-gradient(var(--orange) 0 200deg,#efe7df 200deg)}
+    .circle:after{content:""; position:absolute; width:82px; height:82px; border-radius:50%; background:#fff}
+    .circleInner{position:relative; z-index:1; text-align:center}
+    .circleInner strong{display:block; font-size:28px; color:var(--navy)}
+    .reason{padding:11px; border-radius:16px; background:#f8f4ef; border:1px solid var(--line); margin-top:8px}
+    .recommendation{display:grid; grid-template-columns:46px 1fr; gap:12px; align-items:flex-start}
+    .actionBtn{margin-top:10px; display:inline-flex; border:0; border-radius:14px; padding:9px 14px; background:var(--navy); color:#fff; font-weight:900; font-size:12px}
+    .tabs{display:flex; gap:8px; overflow:auto; margin-bottom:8px; padding-bottom:4px}
+    .tab{padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--muted); font-weight:900; font-size:12px; cursor:pointer}
+    .tab.active{background:var(--navy); border-color:var(--navy); color:#fff}
+    .bottomNav{flex:0 0 auto; background:#fff; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(6,1fr); padding:8px 4px 10px; box-shadow:0 -10px 24px rgba(13,38,61,.08); z-index:30}
+    .navBtn{border:0; background:transparent; color:#a2aab5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:10px; font-weight:900; cursor:pointer}
+    .navBtn span{font-size:19px; display:inline-flex; align-items:center; justify-content:center}
+    .navBtn.active{color:var(--orange)}
+    .errorBanner{position:fixed; top:14px; left:14px; right:14px; z-index:50; background:#fff1ef; color:#9a3434; border:1px solid #efcaca; border-radius:18px; padding:14px; text-align:center; font-weight:900; box-shadow:var(--shadow)}
+
+    .sectionTitle .link:empty{display:none}
+    .txIcon{
+      width:42px;
+      height:42px;
+      border-radius:15px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f6f7f9;
+      color:var(--navy);
+      border:1px solid #e6eaf0;
+      font-size:17px;
+      flex:0 0 auto;
+    }
+    .txIcon.blue{background:var(--blue-soft);color:var(--blue);border-color:#d9e6fb}
+    .txIcon.green{background:var(--green-soft);color:var(--green);border-color:#d7ecdf}
+    .txIcon.purple{background:var(--purple-soft);color:var(--purple);border-color:#e0d9fb}
+    .txIcon.orange{background:var(--orange-soft);color:var(--orange);border-color:#efd9cf}
+    .budgetGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px
+    }
+    .budgetBox{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:14px;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      min-height:132px
+    }
+    .budgetBox.active{
+      border-color:var(--navy);
+      box-shadow:0 0 0 2px rgba(11,39,66,.05), var(--shadow)
+    }
+    .budgetBoxTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px
+    }
+    .budgetBox h4{
+      font-size:15px;
+      color:var(--navy)
+    }
+    .budgetPercent{
+      font-weight:950;
+      color:var(--navy);
+      font-size:16px;
+      direction:ltr
+    }
+    .budgetBox p{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.55;
+      margin-top:5px
+    }
+    .budgetMeta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:11px
+    }
+
+
+    .ghostBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--navy);
+      border-radius:14px;
+      padding:8px 12px;
+      font-weight:900;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .kvRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:11px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .kvRow:last-child{border-bottom:0}
+    .govIcon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f6f7f9;
+      border:1px solid #e6eaf0;
+      color:var(--navy);
+      font-size:17px;
+      flex:0 0 auto;
+    }
+    .govIcon.blue{background:var(--blue-soft); color:var(--blue); border-color:#d9e6fb}
+    .govIcon.green{background:var(--green-soft); color:var(--green); border-color:#d7ecdf}
+    .govIcon.purple{background:var(--purple-soft); color:var(--purple); border-color:#e0d9fb}
+    .govIcon.orange{background:var(--orange-soft); color:var(--orange); border-color:#efd9cf}
+    .detailHero{
+      background:#fff;
+      border-radius:24px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.7);
+      margin-bottom:12px;
+    }
+    .detailSteps{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+    .detailStep{
+      display:grid;
+      grid-template-columns:40px 1fr;
+      gap:10px;
+      align-items:start;
+      padding:12px;
+      background:#f8f4ef;
+      border:1px solid var(--line);
+      border-radius:18px;
+    }
+    .detailStepNo{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--navy);
+      font-weight:900;
+    }
+
+
+    .ghostBtn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--navy);
+      border-radius:14px;
+      padding:8px 12px;
+      font-weight:900;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .detailHero{
+      background:#fff;
+      border-radius:24px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.7);
+      margin-bottom:12px;
+    }
+    .budgetDetailRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding:13px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .budgetDetailRow:last-child{border-bottom:0}
+    .budgetDetailRow .detailInfo{
+      display:flex;
+      align-items:flex-start;
+      gap:11px;
+      min-width:0;
+      flex:1;
+    }
+    .budgetDetailRow .detailBody{flex:1}
+
+
+    .rebalanceFab{
+      display:flex;
+      position:sticky;
+      bottom:16px;
+      margin-inline-start:auto;
+      align-items:center;
+      justify-content:center;
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      border:0;
+      background:linear-gradient(135deg,var(--orange),#b95438);
+      color:#fff;
+      box-shadow:0 14px 28px rgba(207,106,74,.34);
+      z-index:20;
+      cursor:pointer;
+    }
+    .rebalanceRow{
+      padding:13px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .rebalanceRow:last-child{border-bottom:0}
+    .rebalanceHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
+    }
+    .rebalanceValue{
+      font-weight:950;
+      color:var(--navy);
+      direction:ltr;
+      white-space:nowrap;
+    }
+    .rebalanceNote{
+      font-size:11px;
+      color:var(--muted);
+      line-height:1.55;
+      margin-top:5px;
+    }
+    .rebalanceSlider{
+      -webkit-appearance:none;
+      appearance:none;
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#efe7df;
+      margin-top:8px;
+      cursor:pointer;
+    }
+    .rebalanceSlider::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:20px;height:20px;border-radius:50%;
+      background:#fff;border:3px solid var(--navy);
+      box-shadow:0 3px 8px rgba(11,39,66,.25);
+      cursor:pointer;
+    }
+    .rebalanceSlider::-moz-range-thumb{
+      width:20px;height:20px;border-radius:50%;
+      background:#fff;border:3px solid var(--navy);
+      cursor:pointer;
+    }
+    .rebalanceTotalBar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:11px 13px; border-radius:16px; background:#f8f4ef;
+      border:1px solid var(--line); margin-bottom:12px; font-weight:900;
+      font-size:13px; color:var(--navy);
+    }
+    .rebalanceTotalBar.over{background:var(--red-soft); color:var(--red); border-color:#f2cccc}
+    .rebalanceActions{display:flex; gap:8px; margin-top:12px}
+    .rebalanceActions .primaryBtn{
+      flex:1; border:0; border-radius:14px; padding:12px; background:var(--navy);
+      color:#fff; font-weight:900; font-size:13px; cursor:pointer;
+    }
+    .rebalanceActions .ghostBtn{flex:0 0 auto}
+    .compareGrid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .compareBox{background:#f8f4ef; border:1px solid var(--line); border-radius:16px; padding:11px}
+    .compareBox .tiny{margin-bottom:4px}
+    .compareBox strong{display:block; font-size:15px; direction:ltr}
+    .toast{
+      position:absolute; bottom:96px; left:50%; transform:translateX(-50%);
+      background:var(--navy); color:#fff; padding:11px 18px; border-radius:999px;
+      font-size:12px; font-weight:900; box-shadow:var(--shadow); z-index:60;
+      opacity:0; transition:opacity .25s; pointer-events:none;
+    }
+    .toast.show{opacity:1}
+    .addItemBtn{
+      width:100%; margin-top:10px; border:1px dashed var(--line); background:transparent;
+      color:var(--navy); border-radius:14px; padding:12px; font-weight:900; font-size:13px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .addItemForm{
+      margin-top:10px; padding:12px; background:#f8f4ef; border:1px solid var(--line); border-radius:16px;
+      display:grid; gap:8px;
+    }
+    .addItemForm input{
+      border:1px solid var(--line); border-radius:12px; padding:10px 12px; font-size:13px;
+      font-family:inherit; background:#fff; color:var(--ink);
+    }
+    .addItemForm .row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+    .addItemActions{display:flex; gap:8px}
+    .addItemActions button{flex:1; border:0; border-radius:12px; padding:10px; font-weight:900; font-size:12px; cursor:pointer}
+    .addItemSave{background:var(--navy); color:#fff}
+    .addItemCancel{background:#fff; border:1px solid var(--line) !important; color:var(--muted)}
+    .deleteItemBtn{
+      border:0; background:transparent; color:var(--muted); cursor:pointer;
+      display:flex; align-items:center; justify-content:center; padding:6px; flex:0 0 auto;
+    }
+    .deleteItemBtn:hover{color:var(--red)}
+    .bankCard{
+      position:relative;
+      border-radius:22px;
+      padding:20px;
+      color:#fff;
+      margin-bottom:14px;
+      min-height:150px;
+      overflow:hidden;
+      box-shadow:0 16px 30px -10px rgba(11,39,66,.35);
+    }
+    .bankCard:after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      right:-70px;
+      bottom:-90px;
+    }
+    .bankCard.navy{background:linear-gradient(135deg,#0b2742,#17466f)}
+    .bankCard.orange{background:linear-gradient(135deg,#cf6a4a,#a8482c)}
+    .bankCard.green{background:linear-gradient(135deg,#2f9e68,#1f7a4e)}
+    .bankCard.blue{background:linear-gradient(135deg,#4a7fc2,#2f5f9e)}
+    .bankCard.purple{background:linear-gradient(135deg,#7a68ca,#59489e)}
+    .bankCard.dark{background:linear-gradient(135deg,#2c2c2e,#0f0f10)}
+    .bankCardTop{display:flex; align-items:flex-start; justify-content:space-between; position:relative; z-index:1}
+    .bankChip{
+      width:34px; height:26px; border-radius:6px;
+      background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55));
+      position:relative;
+    }
+    .bankChip:before{
+      content:""; position:absolute; inset:5px;
+      border:1px solid rgba(11,39,66,.35); border-radius:3px;
+    }
+    .bankCardIcon{
+      width:38px; height:38px; border-radius:12px;
+      background:rgba(255,255,255,.16);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff;
+    }
+    .bankCardLabel{font-size:12px; color:rgba(255,255,255,.75); margin-top:16px}
+    .bankCardAmount{font-size:26px; font-weight:950; direction:ltr; text-align:right; margin-top:4px; position:relative; z-index:1}
+    .bankCardSub{font-size:11px; color:rgba(255,255,255,.7); margin-top:3px; position:relative; z-index:1}
+    .bankCardFoot{display:flex; align-items:center; justify-content:space-between; margin-top:18px; position:relative; z-index:1}
+    .bankCardDots{display:flex; gap:5px; align-items:center}
+    .bankCardDots span{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.55); display:inline-block}
+    .bankCardBrand{font-size:11px; font-weight:900; color:rgba(255,255,255,.85)}
+    .bankCardBar{height:5px; border-radius:999px; background:rgba(255,255,255,.22); margin-top:10px; overflow:hidden; position:relative; z-index:1}
+    .bankCardBar div{height:100%; background:#fff; border-radius:999px}
+    .rebalanceItemsBox{margin-top:10px; padding-top:8px; border-top:1px dashed var(--line); display:grid; gap:8px}
+    .rebalanceItemRow{display:flex; align-items:center; gap:8px}
+    .rebalanceItemName{flex:1; font-size:13px; color:var(--ink)}
+    .rebalanceItemInput{
+      width:92px; border:1px solid var(--line); border-radius:10px; padding:6px 8px;
+      font-size:12px; font-family:inherit; direction:ltr; text-align:right; background:#fff; color:var(--ink);
+    }
+    .rebalanceItemSpacer{width:26px; flex:0 0 auto}
+    .rebalanceHead b{display:flex; align-items:center; gap:5px}
+    .increasePill{
+      display:inline-flex; align-items:center; gap:2px;
+      background:var(--orange-soft); color:var(--orange);
+      font-size:11px; font-weight:900; padding:3px 7px; border-radius:999px;
+      direction:ltr;
+    }
+    .aiRecoResult{
+      padding:14px; border-radius:16px; background:var(--purple-soft);
+      border:1px solid #e0d9fb; color:var(--ink); font-size:13px; line-height:1.9;
+    }
+
+  </style>
+</head>
+<body>
+<div class="iphone-shell">
+  <div class="side-btn volume-up"></div>
+  <div class="side-btn volume-down"></div>
+  <div class="side-btn power-btn"></div>
+  <div class="iphone-frame">
+    <div class="dynamic-island"></div>
+    <div class="app">
+    <div class="screensWrap">
+  <section id="home" class="screen active">
+    <div class="top">
+      <div class="brand"><div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div><span>نبراس المالي</span></div>
+      
+    </div>
+
+    <div class="hero">
+      <h1>الميزانية المتبقية</h1>
+      <div class="heroAmount" id="homeBudgetAmount">--</div>
+      <p class="tiny" id="homeBudgetSubtext" style="color:#dbe5ef; margin-top:4px">إجمالي الميزانية: --</p>
+      <div class="statusBox">
+        <div>
+          <div class="statusLabel"><span class="dot"></span><span id="homeStatusTitle">تنبيه</span></div>
+          <p class="muted" id="homeStatusText">جارٍ تحليل نمط الصرف الحالي...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card metric"><div class="metricIcon green"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6.8" rx="7" ry="2.8"/><path d="M5 6.8v10a7 2.8 0 0 0 14 0v-10"/><path d="M5 11.8a7 2.8 0 0 0 14 0"/></svg></div><p class="muted">الدخل الشهري</p><strong id="incomeValue">--</strong></div>
+      <div class="card metric"><div class="metricIcon purple"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.3 18.7 6v6c0 5-3.5 7.5-6.7 8.7C9 19.5 5.3 17 5.3 12V6L12 3.3Z"/></svg></div><p class="muted">الادخار المتوقع</p><strong id="savingValue">--</strong></div>
+      <div class="card metric"><div class="metricIcon blue"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 6V4.8A1.8 1.8 0 0 0 14.2 3H7a1 1 0 0 0-1 1v2"/><circle cx="16" cy="13" r="1.3" fill="currentColor" stroke="none"/></svg></div><p class="muted">الميزانية</p><strong id="budgetValue">--</strong></div>
+      <div class="card metric"><div class="metricIcon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5.5" y1="20" x2="5.5" y2="11"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="18.5" y1="20" x2="18.5" y2="14"/></svg></div><p class="muted">إجمالي المصروفات</p><strong id="spentValue">--</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>التنبيهات</h3><span class="link">الشهر الحالي</span></div>
+      <div id="homeAlerts"></div>
+    </div>
+  </section>
+
+  <section id="expenses" class="screen">
+    <div class="top">
+      <div>
+        <h1>المصروفات</h1>
+      </div>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+    <div class="tabs" id="expenseTabs"></div>
+    <div class="card">
+      <div class="sectionTitle"><h3>آخر العمليات</h3><span class="link" id="classifiedPercent"></span></div>
+      <div id="transactionsList"></div>
+    </div>
+  </section>
+
+  <section id="budget" class="screen">
+    <div class="top">
+      <div>
+        <h1>الميزانية</h1>
+      </div>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>ملخص الميزانية</h3><span class="link" id="budgetUsageText">--</span></div>
+      <div class="budgetSummary">
+        <div class="budgetMini"><p class="tiny">الميزانية</p><strong id="budgetTotal">--</strong></div>
+        <div class="budgetMini"><p class="tiny">المصروف الحالي</p><strong id="budgetSpent">--</strong></div>
+        <div class="budgetMini"><p class="tiny">المتبقي</p><strong id="budgetRemaining">--</strong></div>
+        <div class="budgetMini"><p class="tiny">الادخار المتوقع</p><strong id="budgetSaving">--</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>المصاريف</h3><span class="link"></span></div>
+      <div class="budgetGrid" id="budgetGrid"></div>
+    </div>
+
+    <button class="rebalanceFab" onclick="openBudgetRebalance()" title="إعادة تقسيم الميزانية"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="14" height="11" rx="2.5"/><path d="M13.5 6V4.8A1.6 1.6 0 0 0 11.9 3.2H5.5a1 1 0 0 0-1 1V6"/><circle cx="12.3" cy="11.5" r="0.9" fill="#fff" stroke="none"/><path d="M14.7 19.8l.9-3.9 5-5 2.8 2.8-5 5z"/><path d="M19.6 10.9l2.8 2.8"/></svg></button>
+
+      </section>
+
+  <section id="budget-detail" class="screen">
+    <div class="top">
+      <button class="ghostBtn" onclick="closeBudgetDetail()">رجوع</button>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+
+    <div class="detailHero">
+      <p class="muted">تفاصيل المصروفات</p>
+      <h1 id="budgetDetailTitle">--</h1>
+      <p class="muted" id="budgetDetailDesc" style="margin-top:8px">--</p>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle">
+        <h3>بنود المصروفات</h3>
+        <span class="detailTag" id="budgetDetailPercent">--</span>
+      </div>
+      <div id="budgetDetailList"></div>
+      <div id="addItemArea"></div>
+    </div>
+  </section>
+
+  <section id="budget-rebalance" class="screen">
+    <div class="top">
+      <button class="ghostBtn" onclick="closeBudgetRebalance()">رجوع</button>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+
+    <div class="detailHero">
+      <p class="muted">إعادة تقسيم الميزانية</p>
+      <h1>وزّع ميزانيتك بذكاء</h1>
+      <p class="muted" id="rebalanceIntro" style="margin-top:8px">اقتراح مبني على نمط صرفك الفعلي هذا الشهر، يحافظ على المصاريف الأساسية، ويقلل الهدر بدون تغيير كبير في أسلوب الحياة.</p>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>التوزيع المقترح</h3><span class="link">حرّك الشريط للتعديل</span></div>
+      <div id="rebalanceTotalBar" class="rebalanceTotalBar"></div>
+      <div id="rebalanceList"></div>
+      <div class="rebalanceActions">
+        <button class="primaryBtn" onclick="applyRebalancePlan()">تطبيق هذا التوزيع</button>
+        <button class="ghostBtn" onclick="resetRebalancePlan()">اقتراح جديد</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>قبل وبعد</h3><span class="link">مقارنة</span></div>
+      <div class="compareGrid" id="rebalanceCompare"></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>وش تغيّر؟</h3><span class="link">الأثر</span></div>
+      <div id="rebalanceImpact"></div>
+    </div>
+  </section>
+
+  <section id="forecast" class="screen">
+    <div class="top">
+      <div>
+        <h1>التقرير</h1>
+      </div>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>احتمالية تجاوز الميزانية</h3><span class="chip orange">توقع ذكي</span></div>
+      <div class="circleWrap">
+        <div class="circle" id="riskCircle"><div class="circleInner"><strong id="riskPercent">--%</strong><span class="tiny">احتمالية</span></div></div>
+        <div>
+          <h2 id="riskLevel">--</h2>
+          <p class="muted" id="riskDescription">يتم احتسابها من نمط الصرف الحالي، الميزانية، والدخل.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>توقعات الزيادة</h3><span class="link">الأقرب للارتفاع</span></div>
+      <div id="increaseForecasts"></div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle"><h3>ملخص نهاية الشهر</h3><span class="link">تقدير تقريبي</span></div>
+      <div id="forecastSummary"></div>
+    </div>
+  </section>
+
+  <section id="recommendations" class="screen">
+    <div class="top">
+      <div>
+        <p class="muted">إجراءات واضحة وقابلة للتنفيذ</p>
+        <h1>التوصيات</h1>
+      </div>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+    <div class="card">
+      <div class="sectionTitle"><h3>توصية مولّدة بالذكاء الاصطناعي</h3><span class="chip orange">Llama 3.2</span></div>
+      <div id="aiRecoBox"></div>
+      <button class="addItemBtn" style="margin-top:10px" onclick="fetchAiRecommendations()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5 9 11.5 12 14.5 18.5 7"/><path d="M13.5 7h5v5"/></svg> ولّد توصية الآن</button>
+    </div>
+    <div id="recommendationList"></div>
+  </section>
+
+  <section id="recommendation-detail" class="screen">
+    <div class="top">
+      <button class="ghostBtn" onclick="closeRecommendationDetail()">رجوع</button>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+    <div class="detailHero">
+      <p class="muted">تفاصيل التوصية</p>
+      <h1 id="detailTitle">--</h1>
+      <p class="muted" id="detailDesc" style="margin-top:8px">--</p>
+    </div>
+    <div class="card">
+      <div class="sectionTitle"><h3>الإجراءات المقترحة</h3><span class="link">خطوات عملية</span></div>
+      <div class="detailSteps" id="detailSteps"></div>
+    </div>
+    <div class="card">
+      <div class="sectionTitle"><h3>الأثر المتوقع</h3><span class="link">النتيجة</span></div>
+      <div id="detailImpact"></div>
+    </div>
+  </section>
+
+  <section id="cards" class="screen">
+    <div class="top">
+      <div>
+        <p class="muted">نظرة سريعة على كل فئة</p>
+        <h1>البطاقات</h1>
+      </div>
+      <div class="logo"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="نبراس المالي"><g transform="rotate(18 21 21)"><circle cx="21" cy="21" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.8"/><line x1="37" y1="21" x2="34.2" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="37" x2="21" y2="34.2" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="5" y1="21" x2="7.8" y2="21" stroke="#ffffff" stroke-width="1.6" opacity="0.7"/><line x1="21" y1="22" x2="21" y2="30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/><line x1="21" y1="12.5" x2="21" y2="21" stroke="#cf6a4a" stroke-width="2" stroke-linecap="round"/><path d="M22.9 14.5c-.8-.8-1.9-1-2.9-.6-1.1.4-1.5 1.4-1 2.4.6 1.2 2.7 1.1 3.5 2.2.7.9.2 2.1-1 2.5-1.1.3-2.2 0-2.9-.7" stroke="#cf6a4a" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="21" cy="21" r="1.5" fill="#ffffff"/></g></svg></div>
+    </div>
+    <div id="cardsList"></div>
+  </section>
+    </div>
+    <div class="toast" id="rebalanceToast"></div>
+
+  <nav class="bottomNav">
+    <button class="navBtn active" data-screen="home"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9"/></svg></span>الرئيسية</button>
+    <button class="navBtn" data-screen="expenses"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></span>المصروفات</button>
+    <button class="navBtn" data-screen="budget"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 6V4.8A1.8 1.8 0 0 0 14.2 3H7a1 1 0 0 0-1 1v2"/><circle cx="16" cy="13" r="1.3" fill="currentColor" stroke="none"/></svg></span>الميزانية</button>
+    <button class="navBtn" data-screen="forecast"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.3"/><circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none"/></svg></span>التقرير</button>
+    <button class="navBtn" data-screen="recommendations"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 11.5l2.3 2.3L16 8.3"/></svg></span>التوصيات</button>
+    <button class="navBtn" data-screen="cards"><span><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="15" height="10" rx="2"/><path d="M7 9V6.5A2.5 2.5 0 0 1 9.5 4h9A2.5 2.5 0 0 1 21 6.5v9a2.5 2.5 0 0 1-2.5 2.5H17"/><line x1="3" y1="13" x2="18" y2="13"/></svg></span>البطاقات</button>
+  </nav>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+const sar = n => Number(n || 0).toLocaleString("ar-SA", {maximumFractionDigits:0}) + " ر.س";
+
+// Lightweight inline SVG icon set (stroke = currentColor, so each icon
+// automatically inherits the orange/blue/green/purple tint of its container).
+const ICON_PATHS = {
+  home: '<path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9"/>',
+  list: '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/>',
+  wallet: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 6V4.8A1.8 1.8 0 0 0 14.2 3H7a1 1 0 0 0-1 1v2"/><circle cx="16" cy="13" r="1.3" fill="currentColor" stroke="none"/>',
+  radar: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.3"/><circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none"/>',
+  checklist: '<rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8 11.5l2.3 2.3L16 8.3"/>',
+  coffee: '<path d="M4.5 8h11v6a4 4 0 0 1-4 4h-3a4 4 0 0 1-4-4V8Z"/><path d="M15.5 9.2H17a2.3 2.3 0 0 1 0 4.6h-1.5"/><path d="M7.3 3.6c0 .8.7 1-.2 1.9-.9.8-.9 1.7 0 2.5M11 3.6c0 .8.7 1-.2 1.9-.9.8-.9 1.7 0 2.5"/>',
+  restaurant: '<path d="M6.5 3v6.5a1.7 1.7 0 0 0 1.7 1.7v9.8M6.5 3v4.3M9 3v4.3"/><path d="M17.3 3c-1.6 0-2.8 1.6-2.8 4.3v3.5c0 1.1.6 1.9 1.7 2.2v8"/>',
+  "shopping-bag": '<path d="M6.5 8h11l-1 12h-9L6.5 8Z"/><path d="M9.3 8V6a2.7 2.7 0 0 1 5.4 0v2"/>',
+  receipt: '<path d="M6 3h12v18l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3V3Z"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/>',
+  repeat: '<path d="M4 12a8 8 0 0 1 13.9-5.4M20 6v5h-5"/><path d="M20 12a8 8 0 0 1-13.9 5.4M4 18v-5h5"/>',
+  fuel: '<rect x="4" y="4" width="9" height="16" rx="1.5"/><line x1="6" y1="8" x2="11" y2="8"/><path d="M13 10.2h2l2.3 2.3V16a1.5 1.5 0 0 1-3 0v-.8"/>',
+  basket: '<path d="M4 9h16l-1.5 10a2 2 0 0 1-2 1.7h-9a2 2 0 0 1-2-1.7L4 9Z"/><path d="M8 9 10 4M16 9 14 4"/><line x1="9.3" y1="12.5" x2="9.8" y2="17.5"/><line x1="14.7" y1="12.5" x2="14.2" y2="17.5"/>',
+  exchange: '<path d="M7 7h11l-3-3M17 17H6l3 3"/>',
+  health: '<circle cx="12" cy="12" r="8.5"/><path d="M12 8.3v7.4M8.3 12h7.4"/>',
+  dots: '<circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
+  pin: '<path d="M12 21s-7-6.7-7-11.2A7 7 0 0 1 19 9.8C19 14.3 12 21 12 21Z"/><circle cx="12" cy="9.8" r="2.2"/>',
+  car: '<path d="M4.5 16v-3.2l1.8-3.8h11.4l1.8 3.8V16"/><path d="M4.5 16h15"/><circle cx="8" cy="16.6" r="1.3"/><circle cx="16" cy="16.6" r="1.3"/>',
+  wrench: '<path d="M14.6 6.4a4 4 0 0 0-5.3 5.3L4 17l3 3 5.3-5.3a4 4 0 0 0 5.3-5.3l-2.6 2.6-2-2 2.6-2.6Z"/>',
+  "moon-star": '<path d="M17 12.3A6.3 6.3 0 1 1 12.6 5a5 5 0 0 0 4.4 7.3Z"/><path d="M19.3 4l.5 1.2 1.2.5-1.2.5-.5 1.2-.5-1.2-1.2-.5 1.2-.5.5-1.2Z"/>',
+  backpack: '<path d="M8.3 8V6.3a3.7 3.7 0 0 1 7.4 0V8"/><path d="M6 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><line x1="9.3" y1="13" x2="14.7" y2="13"/>',
+  document: '<path d="M7 3h6.5L18 7.5V21H7V3Z"/><path d="M13.5 3v4.5H18"/><line x1="9.5" y1="12" x2="15.5" y2="12"/><line x1="9.5" y1="15.5" x2="15.5" y2="15.5"/>',
+  shield: '<path d="M12 3.3 18.7 6v6c0 5-3.5 7.5-6.7 8.7C9 19.5 5.3 17 5.3 12V6L12 3.3Z"/>',
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>',
+  "trending-up": '<path d="M4 16.5 9 11.5 12 14.5 18.5 7" /><path d="M13.5 7h5v5"/>',
+  "trending-down": '<path d="M4 8l5 5 3-3 6 7"/><path d="M14 17h4v-4"/>',
+  briefcase: '<rect x="3" y="8" width="18" height="11" rx="2"/><path d="M8.3 8V6.3a1.8 1.8 0 0 1 1.8-1.8h3.8a1.8 1.8 0 0 1 1.8 1.8V8"/><line x1="3" y1="13.3" x2="21" y2="13.3"/>',
+  coins: '<ellipse cx="12" cy="6.8" rx="7" ry="2.8"/><path d="M5 6.8v10a7 2.8 0 0 0 14 0v-10"/><path d="M5 11.8a7 2.8 0 0 0 14 0"/>',
+  "chart-bar": '<line x1="5.5" y1="20" x2="5.5" y2="11"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="18.5" y1="20" x2="18.5" y2="14"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="16" rx="2"/><line x1="3.5" y1="10" x2="20.5" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  "alert-triangle": '<path d="M12 4.2 21 19.5H3L12 4.2Z"/><line x1="12" y1="9.8" x2="12" y2="13.8"/><circle cx="12" cy="16.4" r="0.7" fill="currentColor" stroke="none"/>',
+  "plus-circle": '<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>',
+  "trash": '<path d="M5 7h14"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M7 7l1 13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-13"/>',
+  "cards-stack": '<rect x="3" y="9" width="15" height="10" rx="2"/><path d="M7 9V6.5A2.5 2.5 0 0 1 9.5 4h9A2.5 2.5 0 0 1 21 6.5v9a2.5 2.5 0 0 1-2.5 2.5H17"/><line x1="3" y1="13" x2="18" y2="13"/>',
+  "chevron-down": '<path d="M6 9l6 6 6-6"/>',
+  "chevron-up": '<path d="M6 15l6-6 6 6"/>'
+};
+function icon(name, size){
+  const s = size || 20;
+  return `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICON_PATHS[name] || ICON_PATHS.dots}</svg>`;
+}
+
+let appData = {dashboard:null, transactions:[], risk:null, budget:null, waste:null, customItems:{monthly:[],annual:[],saving:[]}};
+let currentBudgetSection = null;
+let expenseFilter = 'الكل';
+
+function safeArray(v){ return Array.isArray(v) ? v : []; }
+function categoryIcon(cat){
+  const map = {
+    "مطاعم": icon('restaurant'),
+    "قهوة": icon('coffee'),
+    "تسوق": icon('shopping-bag'),
+    "فواتير": icon('receipt'),
+    "اشتراكات": icon('repeat'),
+    "وقود": icon('fuel'),
+    "بقالة": icon('basket'),
+    "تحويلات": icon('exchange'),
+    "صحة": icon('health'),
+    "أخرى": icon('dots')
+  };
+  return map[cat] || icon('dots');
+}
+function statusMeta(level){
+  if(level === 'مرتفع') return {cls:'red', title:'احتمالية التجاوز مرتفعة', text:'الصرف الحالي يحتاج تدخل أسرع حتى ما تتجاوز الميزانية.'};
+  if(level === 'متوسط') return {cls:'orange', title:'تحتاج متابعة', text:'الصرف أعلى من المسار الآمن، لكن تقدر تتداركه.'};
+  return {cls:'green', title:'الوضع مطمئن', text:'الصرف الحالي ضمن المسار المتوقع.'};
+}
+async function getJson(path){
+  const res = await fetch(API + path);
+  if(!res.ok) throw new Error(path);
+  return await res.json();
+}
+
+document.querySelectorAll('.navBtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(btn.dataset.screen).classList.add('active');
+    document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+function buildSections(){
+  const d = appData.dashboard || {};
+  const b = (appData.budget && appData.budget.recommendations) || {};
+  const catSpent = {};
+  safeArray(d.top_categories).forEach(x => catSpent[x.category] = Number(x.amount || 0));
+  const spent = (cats) => cats.reduce((sum,c) => sum + Number(catSpent[c] || 0), 0);
+  const planned = (cats, fallback=0) => cats.reduce((sum,c) => sum + Number((b[c] && b[c].current_budget) || fallback || 0), 0);
+  return [
+    {
+      key:'daily', title:'المصاريف اليومية', icon:icon('coffee'), iconClass:'',
+      desc:'بنزين، قهوة، مطاعم، ومشتريات يومية.',
+      items:[
+        {name:'بنزين', icon:icon('fuel'), spent:Number(catSpent['وقود']||0), planned:Number((b['وقود']&&b['وقود'].current_budget)||600)},
+        {name:'قهوة', icon:icon('coffee'), spent:Number(catSpent['قهوة']||0), planned:Number((b['قهوة']&&b['قهوة'].current_budget)||350)},
+        {name:'مطاعم', icon:icon('restaurant'), spent:Number(catSpent['مطاعم']||0), planned:Number((b['مطاعم']&&b['مطاعم'].current_budget)||900)},
+        {name:'مشتريات يومية', icon:icon('shopping-bag'), spent:Number(catSpent['بقالة']||0) + Math.round(Number(catSpent['تسوق']||0)*0.35), planned:1200}
+      ]
+    },
+    {
+      key:'monthly', title:'المصاريف الشهرية', icon:icon('receipt'), iconClass:'blue',
+      desc:'إيجار، فواتير، اشتراكات، وأقساط.',
+      items:[
+        {name:'إيجار', icon:icon('home'), spent:1800, planned:1800},
+        {name:'فواتير الخدمات', icon:icon('receipt'), spent:Number(catSpent['فواتير']||0), planned:Number((b['فواتير']&&b['فواتير'].current_budget)||1400)},
+        {name:'اشتراكات', icon:icon('repeat'), spent:Number(catSpent['اشتراكات']||0), planned:Number((b['اشتراكات']&&b['اشتراكات'].current_budget)||250)},
+        {name:'أقساط', icon:icon('pin'), spent:Number(catSpent['تحويلات']||0), planned:800}
+      ]
+    },
+    {
+      key:'annual', title:'المصاريف السنوية', icon:icon('calendar'), iconClass:'purple',
+      desc:'مصاريف موسمية وسنوية يتم توزيعها على أشهر السنة.',
+      items:[
+        {name:'تأمين السيارة', icon:icon('car'), spent:164*12, planned:180*12},
+        {name:'الصيانة', icon:icon('wrench'), spent:113*12, planned:150*12},
+        {name:'رمضان والعيد', icon:icon('moon-star'), spent:103*12, planned:250*12},
+        {name:'العودة للمدارس', icon:icon('backpack'), spent:164*12, planned:180*12}
+      ]
+    },
+    {
+      key:'saving', title:'الادخار', icon:icon('shield'), iconClass:'green',
+      desc:'جزء من الدخل لبناء صندوق طوارئ وتحقيق أهداف مالية.',
+      items:[
+        {name:'صندوق الطوارئ', icon:icon('shield'), spent:2249, planned:5000},
+        {name:'شراء سيارة', icon:icon('target'), spent:5000, planned:5000}
+      ]
+    },
+    {
+      key:'investment', title:'الاستثمار', icon:icon('trending-up'), iconClass:'purple',
+      desc:'يبدأ بعد استقرار الميزانية وتكوين ادخار مناسب.',
+      items:[
+        {name:'استثمار طويل المدى', icon:icon('trending-up'), spent:0, planned:Math.round(Number(d.monthly_income||0) * 0.05)},
+        {name:'محفظة مستقبلية', icon:icon('briefcase'), spent:0, planned:Math.round(Number(d.monthly_income||0) * 0.03)}
+      ]
+    }
+  ].map(section => {
+    if(['monthly','annual','saving'].includes(section.key)){
+      const custom = safeArray((appData.customItems||{})[section.key]);
+      section = {...section, items:[...section.items, ...custom.map(ci => ({
+        name: ci.name, icon: icon('plus-circle'), spent:0, planned:Number(ci.planned||0), custom:true
+      }))]};
+    }
+    const spentTotal = section.items.reduce((s,x)=>s+Number(x.spent||0),0);
+    const plannedTotal = section.items.reduce((s,x)=>s+Number(x.planned||0),0);
+    return {...section, spentTotal, plannedTotal, percent: Math.min(100, Math.round((spentTotal/Math.max(plannedTotal,1))*100))};
+  });
+}
+
+function renderHome(){
+  const d = appData.dashboard; const r = appData.risk; const w = appData.waste || {};
+  const remaining = Math.max(Number(d.monthly_budget||0) - Number(d.total_spending||0), 0);
+  const monthlyBudget = Number(d.monthly_budget || 0);
+  const usagePct = Math.round(Number(d.budget_usage_percentage || 0));
+
+  // Real runway estimate: at the current daily spend rate, how many more
+  // days does the remaining budget cover, versus how many days are left
+  // in the month (both come from the risk model's own feature set).
+  const features = (r && r.features) || {};
+  const dailyRate = Number(features.daily_spending_rate || 0);
+  const daysElapsed = Number(features.current_day || 0);
+  const daysRemainingInMonth = Math.max(30 - daysElapsed, 0);
+  let runwayText;
+  if(dailyRate > 0){
+    const daysOfBudgetLeft = Math.floor(remaining / dailyRate);
+    runwayText = daysOfBudgetLeft < daysRemainingInMonth
+      ? `إذا استمر الصرف بنفس هذا المعدل، الميزانية تكفي ${daysOfBudgetLeft} يوم فقط، أي قبل نهاية الشهر بـ ${daysRemainingInMonth - daysOfBudgetLeft} يوم.`
+      : 'إذا استمر الصرف بنفس هذا المعدل، الميزانية تكفي حتى نهاية الشهر.';
+  } else {
+    runwayText = 'ما فيه صرف كافٍ حتى الآن لحساب معدل يومي دقيق.';
+  }
+
+  homeBudgetAmount.textContent = sar(remaining);
+  homeBudgetSubtext.textContent = `إجمالي الميزانية: ${sar(monthlyBudget)}`;
+  homeStatusTitle.textContent = usagePct >= 75 ? 'تنبيه' : 'الوضع مستقر';
+  homeStatusText.textContent = runwayText;
+
+  incomeValue.textContent = sar(d.monthly_income);
+  const homeExpectedSaving = 1300;
+  savingValue.textContent = sar(homeExpectedSaving);
+  budgetValue.textContent = sar(monthlyBudget);
+  spentValue.textContent = sar(d.total_spending);
+
+  const alerts = [
+    {
+      icon: icon('alert-triangle'), cls:'',
+      title: `استهلكت الميزانية ${usagePct}% حتى الآن`,
+      text: runwayText
+    }
+  ];
+
+  const unusedSub = safeArray(w.unused_subscriptions).sort((a,b)=>Number(b.last_used_days||0)-Number(a.last_used_days||0))[0];
+  if(unusedSub){
+    alerts.push({
+      icon: icon('repeat'), cls:'purple',
+      title: `اشتراك ${unusedSub.name} باقي عليه 15 يوم`,
+      text: `تكلفته الشهرية ${sar(unusedSub.monthly_cost)}، راجع إذا لازم تستمر فيه أو توقفه.`
+    });
+  }
+
+  alerts.push({
+    icon: icon('trending-down'), cls:'blue',
+    title: `الهدر المحتمل ${sar(w.waste_amount || 0)}`,
+    text: 'عندك مصاريف قابلة للتقليل هذا الشهر، مثل استهلاك نوع مختلف من القهوة.'
+  });
+
+  alerts.push({
+    icon: icon('shield'), cls:'green',
+    title: `الادخار المتوقع ${sar(homeExpectedSaving)}`,
+    text: 'راجع التنبيهات الحالية للحفاظ على هدف الادخار وتخفيف المصروفات الثانوية.'
+  });
+
+  homeAlerts.innerHTML = alerts.map(a => `
+    <div class="alertRow">
+      <div class="alertDot ${a.cls}">${a.icon}</div>
+      <div class="alertText">
+        <b>${a.title}</b>
+        <p>${a.text}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderExpenseTabs(){
+  const tabs = ['الكل','مطاعم','قهوة','تسوق','فواتير','اشتراكات'];
+  expenseTabs.innerHTML = tabs.map(t=>`<button class="tab ${expenseFilter===t?'active':''}" data-filter="${t}">${t}</button>`).join('');
+  expenseTabs.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{expenseFilter=btn.dataset.filter; renderExpenseTabs(); renderTransactions();}));
+}
+
+function renderTransactions(){
+  const txs = safeArray(appData.transactions).filter(t => expenseFilter==='الكل' ? true : t.category===expenseFilter);
+  classifiedPercent.textContent = '';
+  transactionsList.innerHTML = (txs.length ? txs : safeArray(appData.transactions)).slice(0,30).map((t,i)=>{
+    const cls = i%4===0?'orange':i%4===1?'green':i%4===2?'blue':'purple';
+    return `
+      <div class="row">
+        <div class="left">
+          <div class="govIcon ${cls}">${categoryIcon(t.category)}</div>
+          <div>
+            <b class="truncate">${t.merchant}</b>
+            <p class="tiny">${t.date} · ${t.description}<br>التصنيف: ${t.category}</p>
+          </div>
+        </div>
+        <div class="amountSmall">-${sar(t.amount)}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderBudget(){
+  const d = appData.dashboard;
+  const sections = buildSections();
+  const remaining = Math.max(Number(d.monthly_budget||0) - Number(d.total_spending||0), 0);
+  budgetUsageText.textContent = `${Math.round(Number(d.budget_usage_percentage||0))}% مستخدم`;
+  budgetTotal.textContent = sar(d.monthly_budget);
+  budgetSpent.textContent = sar(d.total_spending);
+  budgetRemaining.textContent = sar(remaining);
+  budgetSaving.textContent = sar(d.expected_saving);
+
+  budgetGrid.innerHTML = sections.map((s)=>`
+    <div class="budgetBox" data-key="${s.key}">
+      <div class="budgetBoxTop">
+        <h4>${s.title}</h4>
+        <div class="budgetPercent">${s.percent}%</div>
+      </div>
+      <p>${s.desc}</p>
+      <div class="budgetMeta">
+        <span>${sar(s.spentTotal)} من ${sar(s.plannedTotal)}</span>
+      </div>
+      <div class="progressBg"><div class="progressFill ${s.percent>=100?'red':s.percent>=75?'':'green'}" style="width:${s.percent}%"></div></div>
+    </div>
+  `).join('');
+
+  budgetGrid.querySelectorAll('.budgetBox').forEach(box=>box.addEventListener('click',()=>openBudgetDetail(box.dataset.key)));
+}
+
+const CUSTOM_ITEM_SECTIONS = ['monthly','annual','saving'];
+const CUSTOM_ITEM_LABELS = {
+  monthly: {placeholder:'مثال: النادي، النقل', hint:'بند شهري جديد', amountLabel:'المبلغ الشهري (ر.س)'},
+  annual: {placeholder:'مثال: صيانة السيارة، تجديد الرخصة', hint:'بند سنوي جديد', amountLabel:'المبلغ السنوي الكامل (ر.س)'},
+  saving: {placeholder:'مثال: شراء سيارة، سفرة', hint:'هدف ادخار جديد', amountLabel:'المبلغ المستهدف (ر.س)'}
+};
+
+function openBudgetDetail(key){
+  currentBudgetSection = key;
+  const section = buildSections().find(s=>s.key===key);
+  if(!section) return;
+
+  budgetDetailTitle.textContent = section.title;
+  budgetDetailDesc.textContent = section.desc;
+  budgetDetailPercent.textContent = `${section.percent}%`;
+
+  budgetDetailList.innerHTML = section.items.map((item,i)=>{
+    const pct = Math.min(100, Math.round((Number(item.spent||0) / Math.max(Number(item.planned||1),1))*100));
+    const cls = pct>=100?'red':pct>=75?'':(i%3===1?'green':i%3===2?'purple':'blue');
+    const deleteBtn = item.custom
+      ? `<button class="deleteItemBtn" onclick="deleteCustomItem('${key}','${item.name.replace(/'/g,"\\'")}')" title="حذف">${icon('trash',16)}</button>`
+      : '';
+    return `
+      <div class="budgetDetailRow">
+        <div class="detailInfo">
+          <div class="govIcon ${i%4===0?'orange':i%4===1?'green':i%4===2?'blue':'purple'}">${item.icon}</div>
+          <div class="detailBody">
+            <b>${item.name}</b>
+            <p class="tiny">${sar(item.spent)} من ${sar(item.planned)}</p>
+            <div class="progressBg"><div class="progressFill ${cls}" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        <div class="amountSmall">${pct}%</div>
+        ${deleteBtn}
+      </div>`;
+  }).join('');
+
+  renderAddItemArea(key);
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('budget-detail').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+}
+
+function renderAddItemArea(key){
+  if(!CUSTOM_ITEM_SECTIONS.includes(key)){ addItemArea.innerHTML = ''; return; }
+  const meta = CUSTOM_ITEM_LABELS[key];
+  addItemArea.innerHTML = `<button class="addItemBtn" onclick="showAddItemForm('${key}')">${icon('plus-circle',18)} إضافة ${meta.hint}</button>`;
+}
+
+function showAddItemForm(key){
+  const meta = CUSTOM_ITEM_LABELS[key];
+  addItemArea.innerHTML = `
+    <div class="addItemForm">
+      <input type="text" id="newItemName" placeholder="${meta.placeholder}">
+      <div class="row">
+        <input type="number" id="newItemAmount" placeholder="${meta.amountLabel}" min="0">
+      </div>
+      <div class="addItemActions">
+        <button class="addItemSave" onclick="submitCustomItem('${key}')">حفظ</button>
+        <button class="addItemCancel" onclick="renderAddItemArea('${key}')">إلغاء</button>
+      </div>
+    </div>`;
+  document.getElementById('newItemName').focus();
+}
+
+async function submitCustomItem(key){
+  const name = document.getElementById('newItemName').value.trim();
+  const amount = Number(document.getElementById('newItemAmount').value || 0);
+  if(!name){ showToast('اكتب اسم البند أول'); return; }
+  if(amount <= 0){ showToast('حدد مبلغ أكبر من صفر'); return; }
+  try{
+    const res = await fetch(API + '/api/budget/custom-item', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({section:key, name, planned:amount})
+    });
+    const data = await res.json();
+    if(!data.added){ showToast(data.reason || 'ما قدرنا نضيف البند'); return; }
+    appData.customItems[key] = data.items;
+    openBudgetDetail(key);
+    renderBudget();
+    showToast('تمت إضافة البند');
+  }catch(err){
+    showToast('تعذر الاتصال بالباك اند');
+  }
+}
+
+async function deleteCustomItem(key, name){
+  try{
+    const res = await fetch(API + '/api/budget/custom-item/delete', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({section:key, name})
+    });
+    const data = await res.json();
+    appData.customItems[key] = data.items || [];
+    openBudgetDetail(key);
+    renderBudget();
+  }catch(err){
+    showToast('تعذر حذف البند');
+  }
+}
+
+function closeBudgetDetail(){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('budget').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.navBtn[data-screen="budget"]');
+  if(btn) btn.classList.add('active');
+}
+
+let rebalancePlan = null; // current working plan (mutated by sliders and item edits)
+let rebalanceBaseline = null; // the "current, unbalanced" spend for comparison
+let expandedRebalance = new Set(); // which itemized buckets are expanded
+
+const SECTION_MAP = {essential:'monthly', annual:'annual', saving:'saving'};
+
+const REBALANCE_META = [
+  {key:'essential', name:'المصاريف الأساسية', note:'إيجار، فواتير، بنزين، أقساط · اضغط لتفاصيل كل بند', cls:'blue', min:30},
+  {key:'daily',     name:'المصاريف اليومية',   note:'قهوة، مطاعم، مشتريات يومية بسقف أوضح', cls:'orange', min:8},
+  {key:'annual',    name:'المصاريف السنوية',   note:'تأمين، صيانة، مواسم، وتجديدات · اضغط لتفاصيل كل بند', cls:'purple', min:4},
+  {key:'saving',    name:'الادخار',            note:'صندوق طوارئ وأهداف مالية · اضغط لتفاصيل كل بند', cls:'green', min:5},
+  {key:'invest',    name:'الاستثمار',          note:'يبدأ بعد استقرار الميزانية والادخار', cls:'', min:0}
+];
+
+// Base (built-in) line items for the three buckets that now support
+// item-level editing. Custom items the person added (gym, transport,
+// car maintenance, buy a car, a trip...) get merged in on top of these.
+function baseItemsFor(bucketKey, income){
+  const d = appData.dashboard || {};
+  const b = (appData.budget && appData.budget.recommendations) || {};
+  if(bucketKey === 'essential'){
+    return [
+      {name:'إيجار', planned:1800},
+      {name:'فواتير الخدمات', planned:Number((b['فواتير']&&b['فواتير'].current_budget)||1400)},
+      {name:'اشتراكات', planned:Number((b['اشتراكات']&&b['اشتراكات'].current_budget)||250)},
+      {name:'أقساط', planned:800}
+    ];
+  }
+  if(bucketKey === 'annual'){
+    return [
+      {name:'تأمين السيارة', planned:180*12},
+      {name:'الصيانة', planned:150*12},
+      {name:'رمضان والعيد', planned:250*12},
+      {name:'العودة للمدارس', planned:180*12}
+    ];
+  }
+  if(bucketKey === 'saving'){
+    return [
+      {name:'صندوق الطوارئ', planned:5000},
+      {name:'شراء سيارة', planned:5000}
+    ];
+  }
+  return [];
+}
+
+function itemsWithCustom(bucketKey, income){
+  const base = baseItemsFor(bucketKey, income);
+  const section = SECTION_MAP[bucketKey];
+  const custom = safeArray((appData.customItems||{})[section]).map(ci => ({
+    name: ci.name, planned: Number(ci.planned||0), custom:true
+  }));
+  return [...base, ...custom];
+}
+
+function computeRebalancePlan(){
+  const d = appData.dashboard || {};
+  const income = Math.max(Number(d.monthly_budget || 8500), 1);
+  const catSpent = {};
+  safeArray(d.top_categories).forEach(x => catSpent[x.category] = Number(x.amount || 0));
+
+  const dailySpent = Number(catSpent['قهوة']||0) + Number(catSpent['مطاعم']||0) + Number(catSpent['بقالة']||0) + Math.round(Number(catSpent['تسوق']||0)*0.35);
+  const riskHigh = ((appData.risk && appData.risk.risk_level) || d.risk_level) === 'مرتفع';
+
+  const essentialItems = itemsWithCustom('essential', income);
+  const annualItems = itemsWithCustom('annual', income);
+  const savingItems = itemsWithCustom('saving', income);
+  const sum = items => items.reduce((s,x)=>s+Number(x.planned||0),0);
+  const essentialSpent = sum(essentialItems);
+
+  rebalanceBaseline = {essentialSpent, dailySpent, income};
+
+  let essentialPct = Math.max(30, Math.round((essentialSpent/income)*100));
+  let dailyPct = Math.max(8, Math.round((dailySpent/income)*100*0.85)); // trim ~15% waste
+  let annualPct = Math.max(4, Math.round((sum(annualItems)/12/income)*100));
+  let savingPct = Math.max(5, Math.round((sum(savingItems)/income)*100));
+  if(riskHigh) savingPct = Math.max(savingPct, 15);
+
+  let used = essentialPct+dailyPct+annualPct+savingPct;
+  let investPct = Math.max(0, 100-used);
+
+  return REBALANCE_META.map(m => {
+    if(m.key==='essential') return {...m, percent:essentialPct, items:essentialItems};
+    if(m.key==='annual') return {...m, percent:annualPct, items:annualItems};
+    if(m.key==='saving') return {...m, percent:savingPct, items:savingItems};
+    if(m.key==='daily') return {...m, percent:dailyPct};
+    return {...m, percent:investPct};
+  });
+}
+
+function rebalanceTotal(){
+  return rebalancePlan.reduce((s,p)=>s+p.percent,0);
+}
+
+function toggleRebalanceBucket(key){
+  if(expandedRebalance.has(key)) expandedRebalance.delete(key); else expandedRebalance.add(key);
+  renderRebalanceList();
+}
+
+function renderRebalanceList(){
+  const d = appData.dashboard || {};
+  const income = Math.max(Number(d.monthly_budget || 8500),1);
+  const total = rebalanceTotal();
+
+  rebalanceTotalBar.className = 'rebalanceTotalBar' + (total!==100 ? ' over' : '');
+  rebalanceTotalBar.innerHTML = total===100
+    ? `<span>إجمالي التوزيع</span><span>100% · ${sar(income)}</span>`
+    : `<span>إجمالي التوزيع</span><span>${total}% — عدّل حتى يوصل 100%</span>`;
+
+  rebalanceList.innerHTML = rebalancePlan.map((p)=>{
+    const amount = Math.round(income * p.percent / 100);
+
+    if(p.items){
+      const expanded = expandedRebalance.has(p.key);
+      const itemsHtml = p.items.map((item,idx) => `
+        <div class="rebalanceItemRow">
+          ${item.custom
+            ? `<button class="deleteItemBtn" onclick="deleteRebalanceItem('${p.key}',${idx})" title="حذف">${icon('trash',15)}</button>`
+            : `<span class="rebalanceItemSpacer"></span>`}
+          <span class="rebalanceItemName">${item.name}</span>
+          <input type="number" class="rebalanceItemInput" value="${item.planned}" min="0"
+            oninput="onRebalanceItemChange('${p.key}',${idx},this.value)">
+        </div>
+      `).join('');
+      return `
+        <div class="rebalanceRow">
+          <div class="rebalanceHead" onclick="toggleRebalanceBucket('${p.key}')" style="cursor:pointer">
+            <b>${p.name} ${icon(expanded?'chevron-up':'chevron-down',15)}</b>
+            <span class="rebalanceValue">${p.percent}% · ${sar(amount)}</span>
+          </div>
+          <div class="progressBg"><div class="progressFill ${p.cls}" style="width:${Math.min(p.percent,100)}%"></div></div>
+          <p class="rebalanceNote">${p.note}</p>
+          ${expanded ? `
+            <div class="rebalanceItemsBox">
+              ${itemsHtml}
+              <button class="addItemBtn" onclick="showAddRebalanceItemForm('${p.key}')">${icon('plus-circle',16)} إضافة بند</button>
+              <div id="rebalanceAddForm-${p.key}"></div>
+            </div>` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="rebalanceRow">
+        <div class="rebalanceHead">
+          <b>${p.name}</b>
+          <span class="rebalanceValue">${p.percent}% · ${sar(amount)}</span>
+        </div>
+        <input type="range" class="rebalanceSlider" min="${p.min}" max="80" value="${p.percent}"
+          oninput="onRebalanceSlide('${p.key}', this.value)">
+        <p class="rebalanceNote">${p.note}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+function onRebalanceItemChange(key, idx, value){
+  const bucket = rebalancePlan.find(p=>p.key===key);
+  if(!bucket || !bucket.items) return;
+  bucket.items[idx].planned = Number(value)||0;
+  const income = Math.max(Number((appData.dashboard&&appData.dashboard.monthly_budget)||8500),1);
+  const divisor = key === 'annual' ? 12 : 1;
+  const sum = bucket.items.reduce((s,x)=>s+Number(x.planned||0),0);
+  bucket.percent = Math.max(bucket.min, Math.round((sum/divisor/income)*100));
+  renderRebalanceList();
+  renderRebalanceImpact();
+}
+
+function showAddRebalanceItemForm(key){
+  const section = SECTION_MAP[key];
+  const meta = CUSTOM_ITEM_LABELS[section];
+  const container = document.getElementById('rebalanceAddForm-'+key);
+  if(!container) return;
+  container.innerHTML = `
+    <div class="addItemForm">
+      <input type="text" id="newRebItemName-${key}" placeholder="${meta.placeholder}">
+      <input type="number" id="newRebItemAmount-${key}" placeholder="${meta.amountLabel}" min="0">
+      <div class="addItemActions">
+        <button class="addItemSave" onclick="submitRebalanceCustomItem('${key}')">حفظ</button>
+        <button class="addItemCancel" onclick="document.getElementById('rebalanceAddForm-${key}').innerHTML=''">إلغاء</button>
+      </div>
+    </div>`;
+  document.getElementById('newRebItemName-'+key).focus();
+}
+
+async function submitRebalanceCustomItem(key){
+  const section = SECTION_MAP[key];
+  const name = document.getElementById('newRebItemName-'+key).value.trim();
+  const amount = Number(document.getElementById('newRebItemAmount-'+key).value || 0);
+  if(!name){ showToast('اكتب اسم البند أول'); return; }
+  if(amount <= 0){ showToast('حدد مبلغ أكبر من صفر'); return; }
+  try{
+    const res = await fetch(API + '/api/budget/custom-item', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({section, name, planned:amount})
+    });
+    const data = await res.json();
+    if(!data.added){ showToast(data.reason || 'ما قدرنا نضيف البند'); return; }
+    appData.customItems[section] = data.items;
+    expandedRebalance.add(key);
+    rebalancePlan = computeRebalancePlan();
+    renderRebalanceList();
+    renderRebalanceCompare();
+    renderRebalanceImpact();
+    showToast('تمت إضافة البند');
+  }catch(err){
+    showToast('تعذر الاتصال بالباك اند');
+  }
+}
+
+async function deleteRebalanceItem(key, idx){
+  const bucket = rebalancePlan.find(p=>p.key===key);
+  const item = bucket && bucket.items[idx];
+  if(!item || !item.custom) return;
+  const section = SECTION_MAP[key];
+  try{
+    const res = await fetch(API + '/api/budget/custom-item/delete', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({section, name:item.name})
+    });
+    const data = await res.json();
+    appData.customItems[section] = data.items || [];
+    expandedRebalance.add(key);
+    rebalancePlan = computeRebalancePlan();
+    renderRebalanceList();
+    renderRebalanceCompare();
+    renderRebalanceImpact();
+  }catch(err){
+    showToast('تعذر حذف البند');
+  }
+}
+
+function onRebalanceSlide(key, value){
+  const item = rebalancePlan.find(p=>p.key===key);
+  if(item) item.percent = Number(value);
+  renderRebalanceList();
+  renderRebalanceImpact();
+}
+
+function renderRebalanceCompare(){
+  const b = rebalanceBaseline; const income = b.income;
+  const dailyItem = rebalancePlan.find(p=>p.key==='daily');
+  const savingItem = rebalancePlan.find(p=>p.key==='saving');
+  const proposedDaily = Math.round(income * dailyItem.percent/100);
+  const proposedSaving = Math.round(income * savingItem.percent/100);
+
+  rebalanceCompare.innerHTML = `
+    <div class="compareBox"><p class="tiny">المصاريف اليومية الآن</p><strong>${sar(b.dailySpent)}</strong></div>
+    <div class="compareBox"><p class="tiny">المصاريف اليومية المقترحة</p><strong>${sar(proposedDaily)}</strong></div>
+    <div class="compareBox"><p class="tiny">الادخار الحالي المتوقع</p><strong>${sar(Number((appData.dashboard&&appData.dashboard.expected_saving)||0))}</strong></div>
+    <div class="compareBox"><p class="tiny">الادخار المقترح</p><strong>${sar(proposedSaving)}</strong></div>
+  `;
+}
+
+function renderRebalanceImpact(){
+  const b = rebalanceBaseline;
+  const dailyItem = rebalancePlan.find(p=>p.key==='daily');
+  const savingItem = rebalancePlan.find(p=>p.key==='saving');
+  const proposedDaily = Math.round(b.income * dailyItem.percent/100);
+  const wasteReduction = Math.max(0, b.dailySpent - proposedDaily);
+  const total = rebalanceTotal();
+
+  rebalanceImpact.innerHTML = `
+    <div class="kvRow"><span>تقليل الهدر المتوقع</span><strong>${sar(wasteReduction)}</strong></div>
+    <div class="kvRow"><span>نسبة الادخار المقترحة</span><strong>${savingItem.percent}%</strong></div>
+    <div class="kvRow"><span>التأثير على أسلوب الحياة</span><strong>${wasteReduction>800?'متوسط':'منخفض'}</strong></div>
+    <div class="kvRow"><span>حالة التوزيع</span><strong>${total===100?'جاهز للتطبيق':'يحتاج ضبط'}</strong></div>
+  `;
+}
+
+function showToast(msg){
+  rebalanceToast.textContent = msg;
+  rebalanceToast.classList.add('show');
+  setTimeout(()=>rebalanceToast.classList.remove('show'), 2400);
+}
+
+function resetRebalancePlan(){
+  rebalancePlan = computeRebalancePlan();
+  renderRebalanceList();
+  renderRebalanceCompare();
+  renderRebalanceImpact();
+  showToast('تم توليد اقتراح جديد بناءً على صرفك الحالي');
+}
+
+async function applyRebalancePlan(){
+  if(rebalanceTotal() !== 100){
+    showToast('التوزيع لازم يكمل 100% قبل التطبيق');
+    return;
+  }
+  // Backend note: persisted via POST /api/budget/rebalance {plan}.
+  // Falls back to a local confirmation if the endpoint isn't deployed yet.
+  try{
+    const res = await fetch(API + '/api/budget/rebalance', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({plan: rebalancePlan})
+    });
+    if(!res.ok) throw new Error('not-ok');
+    showToast('تم تطبيق التوزيع الجديد على ميزانيتك');
+  }catch(err){
+    showToast('التوزيع محفوظ هنا — يحتاج endpoint بالباك اند ليصير دائمًا');
+  }
+}
+
+function openBudgetRebalance(){
+  rebalancePlan = computeRebalancePlan();
+  renderRebalanceList();
+  renderRebalanceCompare();
+  renderRebalanceImpact();
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('budget-rebalance').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+}
+
+function closeBudgetRebalance(){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('budget').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.navBtn[data-screen="budget"]');
+  if(btn) btn.classList.add('active');
+}
+
+function renderForecast(){
+  const d = appData.dashboard; const r = appData.risk;
+  const meta = statusMeta(r.risk_level || d.risk_level);
+  const pct = Math.round(Number(r.risk_percentage || d.risk_percentage || 0));
+  const projected = Number(d.projected_month_end_spending || 0);
+  const monthlyBudget = Number(d.monthly_budget || 0);
+  const expectedSaving = Number(d.expected_saving || 0);
+  const extra = Math.max(projected - Number(d.total_spending || 0), 0);
+
+  riskPercent.textContent = `${pct}%`;
+  riskCircle.style.background = `conic-gradient(var(--orange) 0 ${Math.round(pct*3.6)}deg,#efe7df ${Math.round(pct*3.6)}deg)`;
+  riskLevel.textContent = meta.title;
+
+  const features = r.features || {};
+  const dailyRate = Number(features.daily_spending_rate || 0);
+  const daysElapsed = Number(features.current_day || 0);
+  const daysRemainingInMonth = Math.max(30 - daysElapsed, 0);
+  const remainingBudget = Math.max(monthlyBudget - Number(d.total_spending || 0), 0);
+  const daysOfBudgetLeft = dailyRate > 0 ? Math.floor(remainingBudget / dailyRate) : daysRemainingInMonth;
+  const daysShort = Math.max(daysRemainingInMonth - daysOfBudgetLeft, 0);
+
+  riskDescription.textContent = daysShort > 0
+    ? `استنادًا إلى الصرف الحالي، هناك احتمال ${pct}% لتجاوز الميزانية قبل نهاية الشهر بـ ${daysShort} ${daysShort===1?'يوم':'أيام'}.`
+    : `استنادًا إلى الصرف الحالي، هناك احتمال ${pct}% لتجاوز الميزانية، لكن الميزانية تكفي حتى نهاية الشهر.`;
+
+  const recs = (appData.budget && appData.budget.recommendations) || {};
+  const topCats = safeArray(d.top_categories).slice(0,3);
+  increaseForecasts.innerHTML = topCats.map((cat, i) => {
+    const current = Number(cat.amount || 0);
+    const planned = Number((recs[cat.category] && recs[cat.category].current_budget) || current || 1);
+    const projectedCat = Math.round(current + (extra * (current / Math.max(Number(d.total_spending || 1),1))));
+    const pctUse = Math.min(100, Math.round((current / Math.max(planned,1))*100));
+    const overrunPct = Math.round(((projectedCat - planned) / Math.max(planned,1)) * 100);
+    const cls = i===0?'orange':i===1?'blue':'purple';
+    return `
+      <div class="row">
+        <div class="left">
+          <div class="govIcon ${cls}">${categoryIcon(cat.category)}</div>
+          <div>
+            <b>${cat.category}</b>
+            <p class="tiny">المصروف الحالي ${sar(current)} · المتوقع بنهاية الشهر ${sar(projectedCat)}</p>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+          <div class="amountSmall">${pctUse}%</div>
+          <span class="tiny" style="color:var(--muted)">من الميزانية</span>
+          ${overrunPct > 0 ? `<span class="increasePill">${icon('chevron-up',12)}${overrunPct}% متوقع تجاوزها</span>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const summaryProjected = 10200;
+  const summaryOverrun = 1700;
+  const summarySaving = 1300;
+
+  forecastSummary.innerHTML = `
+    <div class="kvRow"><span>الصرف الحالي</span><strong>${sar(d.total_spending)}</strong></div>
+    <div class="kvRow"><span>الصرف المتوقع بنهاية الشهر</span><strong>${sar(summaryProjected)}</strong></div>
+    <div class="kvRow"><span>التجاوز المتوقع</span><strong>${sar(summaryOverrun)}</strong></div>
+    <div class="kvRow"><span>الادخار المتوقع</span><strong>${sar(summarySaving)}</strong></div>
+  `;
+}
+
+function recommendationCatalog(){
+  const waste = appData.waste || {};
+  const d = appData.dashboard || {};
+  return [
+    {
+      id:'restaurants',
+      icon:icon('restaurant'), cls:'orange',
+      title:'تقليل مصروف المطاعم',
+      desc:'هذا التصنيف من أكثر الفئات استهلاكًا للميزانية، وتقليله يساعد على تحسين التوازن الشهري.',
+      steps:['حدد سقفًا أسبوعيًا للمطاعم.','استبدل بعض الطلبات بوجبات منزلية.','راجع عمليات نهاية الأسبوع لأنها غالبًا الأعلى صرفًا.'],
+      impact:[['الوفر المحتمل', sar(250)], ['الأثر على الميزانية', 'تقليل خطر التجاوز'], ['الفئة المرتبطة', 'مطاعم']]
+    },
+    {
+      id:'subscriptions',
+      icon:icon('repeat'), cls:'purple',
+      title:'مراجعة الاشتراكات',
+      desc:`توجد مصاريف متكررة يمكن تقليلها أو إيقاف غير المستخدم منها. الهدر المحتمل الحالي ${sar(waste.waste_amount || 0)}.`,
+      steps:['راجع جميع الاشتراكات الشهرية.','حدد غير المستخدم أو الأقل أولوية.','أوقف أو خفف الباقات غير الضرورية.'],
+      impact:[['الوفر المحتمل', sar(Math.round((waste.waste_amount || 0) * 0.4))], ['الأثر على الميزانية', 'رفع المتبقي الشهري'], ['الفئة المرتبطة', 'اشتراكات']]
+    },
+    {
+      id:'saving',
+      icon:icon('shield'), cls:'green',
+      title:'حماية هدف الادخار',
+      desc:'تخصيص مبلغ الادخار أولًا يساعد على منع استهلاكه في المصروفات الثانوية.',
+      steps:['ثبّت مبلغ الادخار في بداية الشهر.','راقب الفئات المتغيرة أسبوعيًا.','وجّه أي وفر إضافي مباشرة إلى الادخار.'],
+      impact:[['الادخار المتوقع', sar(d.expected_saving || 0)], ['الأثر على الميزانية', 'تحسين الاستقرار المالي'], ['الفئة المرتبطة', 'ادخار']]
+    },
+    {
+      id:'seasonal',
+      icon:icon('calendar'), cls:'blue',
+      title:'الاستعداد للمصاريف الموسمية',
+      desc:'بعض المصروفات لا تظهر شهريًا، لذلك توزيعها على أشهر السنة يمنع الضغط المالي عند موعدها.',
+      steps:['حدد قائمة المصروفات السنوية المتوقعة.','وزعها على 12 شهرًا كمخصص شهري.','تابع الرصيد المخصص لهذه الفئة بشكل مستقل.'],
+      impact:[['الأثر المتوقع', 'تقليل المفاجآت المالية'], ['النتيجة', 'جاهزية أفضل للمواسم'], ['الفئة المرتبطة', 'سنوية']]
+    }
+  ];
+}
+
+function openRecommendationDetail(id){
+  const item = recommendationCatalog().find(x => x.id === id);
+  if(!item) return;
+  detailTitle.textContent = item.title;
+  detailDesc.textContent = item.desc;
+  detailSteps.innerHTML = item.steps.map((step, idx) => `
+    <div class="detailStep">
+      <div class="detailStepNo">${idx + 1}</div>
+      <div><b>خطوة ${idx + 1}</b><p class="tiny">${step}</p></div>
+    </div>
+  `).join('');
+  detailImpact.innerHTML = item.impact.map(x => `
+    <div class="kvRow"><span>${x[0]}</span><strong>${x[1]}</strong></div>
+  `).join('');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('recommendation-detail').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+}
+
+function closeRecommendationDetail(){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('recommendations').classList.add('active');
+  document.querySelectorAll('.navBtn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.navBtn[data-screen="recommendations"]');
+  if(btn) btn.classList.add('active');
+}
+
+function renderRecommendations(){
+  const cards = recommendationCatalog();
+  recommendationList.innerHTML = cards.map(c=>`
+    <div class="card recommendation">
+      <div class="govIcon ${c.cls}">${c.icon}</div>
+      <div>
+        <h3>${c.title}</h3>
+        <p class="muted">${c.desc}</p>
+        <button class="actionBtn" onclick="openRecommendationDetail('${c.id}')">عرض التفاصيل</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function fetchAiRecommendations(){
+  aiRecoBox.innerHTML = `<div class="emptyBox">جارٍ توليد التوصية من نموذج llama3.2 المحلي...</div>`;
+  try{
+    const res = await fetch(API + '/api/ai/recommendations');
+    const data = await res.json();
+    if(data.generated){
+      aiRecoBox.innerHTML = `<div class="aiRecoResult">${data.text.replace(/\n/g,'<br>')}</div>`;
+    }else{
+      aiRecoBox.innerHTML = `<div class="emptyBox">تعذر توليد التوصية: ${data.reason || 'سبب غير معروف'}</div>`;
+    }
+  }catch(err){
+    aiRecoBox.innerHTML = `<div class="emptyBox">تعذر الاتصال بالباك اند. تأكد إن السيرفر شغّال على http://127.0.0.1:8000.</div>`;
+  }
+}
+
+function renderCardsScreen(){
+  const sections = buildSections();
+  const byKey = k => sections.find(s=>s.key===k) || {items:[], spentTotal:0, plannedTotal:0};
+  const sum = (items,key) => items.reduce((s,x)=>s+Number(x[key]||0),0);
+
+  const monthly = byKey('monthly');
+  const fixedNames = ['إيجار','أقساط'];
+  const fixedItems = monthly.items.filter(i => fixedNames.includes(i.name));
+  const flexibleItems = monthly.items.filter(i => !fixedNames.includes(i.name));
+  const daily = byKey('daily');
+  const annual = byKey('annual');
+  const saving = byKey('saving');
+  const investment = byKey('investment');
+
+  const cards = [
+    {title:'المصاريف الثابتة', desc:'إيجار وأقساط لا تتغير شهريًا', cls:'navy', ic:'home',
+      spent:sum(fixedItems,'spent'), planned:sum(fixedItems,'planned')},
+    {title:'المصاريف الشهرية', desc:'فواتير واشتراكات متكررة', cls:'blue', ic:'repeat',
+      spent:sum(flexibleItems,'spent'), planned:sum(flexibleItems,'planned')},
+    {title:'المصاريف اليومية', desc:'بنزين، قهوة، مطاعم، ومشتريات', cls:'orange', ic:'coffee',
+      spent:daily.spentTotal, planned:daily.plannedTotal},
+    {title:'المصاريف السنوية', desc:'موسمية تتوزع على أشهر السنة', cls:'purple', ic:'calendar',
+      spent:annual.spentTotal, planned:annual.plannedTotal},
+    {title:'الادخار', desc:'صندوق طوارئ وأهداف مالية', cls:'green', ic:'shield',
+      spent:saving.spentTotal, planned:saving.plannedTotal},
+    {title:'الاستثمار', desc:'يبدأ بعد استقرار الادخار', cls:'dark', ic:'trending-up',
+      spent:investment.spentTotal, planned:investment.plannedTotal}
+  ];
+
+  cardsList.innerHTML = cards.map(c => {
+    const pct = Math.min(100, Math.round((c.spent / Math.max(c.planned,1))*100));
+    return `
+      <div class="bankCard ${c.cls}">
+        <div class="bankCardTop">
+          <div class="bankChip"></div>
+          <div class="bankCardIcon">${icon(c.ic,20)}</div>
+        </div>
+        <p class="bankCardLabel">${c.title} · ${c.desc}</p>
+        <div class="bankCardAmount">${sar(c.spent)}</div>
+        <p class="bankCardSub">من ${sar(c.planned)} مخطط لها</p>
+        <div class="bankCardBar"><div style="width:${pct}%"></div></div>
+        <div class="bankCardFoot">
+          <div class="bankCardDots"><span></span><span></span><span></span><span></span></div>
+          <span class="bankCardBrand">نبراس</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function loadApp(){
+  const [dashboard, transactions, risk, budget, waste, customItems] = await Promise.all([
+    getJson('/api/dashboard'),
+    getJson('/api/transactions'),
+    getJson('/api/predict-risk'),
+    getJson('/api/budget'),
+    getJson('/api/waste'),
+    getJson('/api/budget/custom-items')
+  ]);
+  appData = {dashboard, transactions, risk, budget, waste, customItems};
+  renderHome();
+  renderExpenseTabs();
+  renderTransactions();
+  renderBudget();
+  renderForecast();
+  renderRecommendations();
+  renderCardsScreen();
+}
+
+loadApp().catch(err => {
+  const div = document.createElement('div');
+  div.className = 'errorBanner';
+  div.textContent = 'شغّل الباكند أولًا على http://127.0.0.1:8000';
+  document.body.appendChild(div);
+  console.error(err);
+});
+</script>
+</body>
+</html>
