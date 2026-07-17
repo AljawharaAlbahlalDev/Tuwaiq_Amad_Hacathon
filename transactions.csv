@@ -1,0 +1,40 @@
+date,merchant,amount,description
+2026-07-01,Starbucks Riyadh,34,POS Purchase
+2026-07-01,Tamimi Markets,236,POS Purchase
+2026-07-02,HungerStation,188,Online Payment
+2026-07-03,STC Bill Payment,320,Bill Payment
+2026-07-04,Jarir Bookstore,620,POS Purchase
+2026-07-05,BARN Cafe,27,POS Purchase
+2026-07-06,Jahez,154,Online Payment
+2026-07-06,Aramco Petrol,190,POS Purchase
+2026-07-07,Netflix,59,Subscription
+2026-07-08,Noon Shopping,790,Online Payment
+2026-07-09,Dunkin,41,POS Purchase
+2026-07-10,Carrefour,380,POS Purchase
+2026-07-11,Apple iCloud,12,Subscription
+2026-07-12,McDonald,92,POS Purchase
+2026-07-13,ZARA Riyadh Park,980,POS Purchase
+2026-07-14,Shahid Subscription,39,Subscription
+2026-07-15,HungerStation,211,Online Payment
+2026-07-16,Starbucks,48,POS Purchase
+2026-07-17,Panda,290,POS Purchase
+2026-07-18,Zain Bill,240,Bill Payment
+2026-06-01,Starbucks Riyadh,28,POS Purchase
+2026-06-02,HungerStation,120,Online Payment
+2026-06-04,Tamimi Markets,310,POS Purchase
+2026-06-06,Aramco Petrol,180,POS Purchase
+2026-06-08,Jarir Bookstore,220,POS Purchase
+2026-06-10,STC Bill Payment,310,Bill Payment
+2026-06-14,Dunkin,29,POS Purchase
+2026-06-18,Jahez,105,Online Payment
+2026-06-21,Noon Shopping,320,Online Payment
+2026-06-28,Netflix,59,Subscription
+2026-05-01,BARN Cafe,23,POS Purchase
+2026-05-02,HungerStation,98,Online Payment
+2026-05-05,Carrefour,355,POS Purchase
+2026-05-09,STC Bill Payment,310,Bill Payment
+2026-05-12,Jarir Bookstore,180,POS Purchase
+2026-05-18,Aramco Petrol,175,POS Purchase
+2026-05-22,Starbucks,31,POS Purchase
+2026-05-26,Noon Shopping,260,Online Payment
+2026-05-28,Netflix,59,Subscription
